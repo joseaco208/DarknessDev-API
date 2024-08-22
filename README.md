@@ -71,7 +71,7 @@ Para iniciar el servidor localmente, utiliza el siguiente comando en la raíz de
 node index.js
 ```
 
-El servidor se ejecutará en [http://localhost:3000](http://localhost:3000). Puedes acceder a los diferentes endpoints utilizando herramientas como Postman, Insomnia o simplemente a través de tu navegador.
+Puedes acceder a los diferentes endpoints utilizando herramientas como Postman, Insomnia o simplemente a través de tu navegador.
 
 ## Endpoints
 
