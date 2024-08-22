@@ -1,43 +1,58 @@
-DarknessDev API
-GitHub
-GitHub issues
-GitHub forks
-GitHub stars
-Descripción
-La DarknessDev API es una API RESTful desarrollada en Node.js que proporciona una serie de servicios útiles para desarrolladores y usuarios. Esta API permite realizar conversiones de colores, timestamps, diferencias de fechas, unidades de medida y texto a código morse. Su diseño modular y fácil de usar la convierte en una herramienta valiosa para cualquier aplicación que requiera estas funcionalidades.
-Índice
-Características
-Tecnologías
-Instalación
-Uso
-Endpoints
-Ejemplos de Uso
-Manejo de Errores
-Contribuciones
-Licencia
-Despliegue en Render
-Características
-Conversión de códigos hexadecimales a nombres de colores.
-Conversión de timestamps Unix a un formato legible.
-Cálculo de la diferencia en días entre dos fechas.
-Conversión de unidades de medida.
-Conversión de texto a código morse.
-Listado de unidades disponibles.
-Tecnologías
+Aquí tienes el contenido del README correctamente formateado para que puedas copiarlo:
+text
+# DarknessDev API
+
+![GitHub](https://img.shields.io/github/license/joseaco208/DarknessDev-API)
+![GitHub issues](https://img.shields.io/github/issues/joseaco208/DarknessDev-API)
+![GitHub forks](https://img.shields.io/github/forks/joseaco208/DarknessDev-API)
+![GitHub stars](https://img.shields.io/github/stars/joseaco208/DarknessDev-API)
+
+## Descripción
+
+La **DarknessDev API** es una API RESTful desarrollada en **Node.js** que proporciona una serie de servicios útiles para desarrolladores y usuarios. Esta API permite realizar conversiones de colores, timestamps, diferencias de fechas, unidades de medida y texto a código morse. Su diseño modular y fácil de usar la convierte en una herramienta valiosa para cualquier aplicación que requiera estas funcionalidades.
+
+## Índice
+
+- [Características](#características)
+- [Tecnologías](#tecnologías)
+- [Instalación](#instalación)
+- [Uso](#uso)
+- [Endpoints](#endpoints)
+- [Ejemplos de Uso](#ejemplos-de-uso)
+- [Manejo de Errores](#manejo-de-errores)
+- [Contribuciones](#contribuciones)
+- [Licencia](#licencia)
+- [Despliegue en Render](#despliegue-en-render)
+
+## Características
+
+- Conversión de códigos hexadecimales a nombres de colores.
+- Conversión de timestamps Unix a un formato legible.
+- Cálculo de la diferencia en días entre dos fechas.
+- Conversión de unidades de medida.
+- Conversión de texto a código morse.
+- Listado de unidades disponibles.
+
+## Tecnologías
+
 Esta API está construida utilizando las siguientes tecnologías:
-Node.js: Entorno de ejecución para JavaScript en el lado del servidor.
-Express: Framework web para Node.js que facilita la creación de aplicaciones y APIs.
-Color: Paquete para manipular y convertir colores.
-Color-Namer: Paquete que permite obtener el nombre de un color a partir de su código hexadecimal.
-Moment: Biblioteca para el manejo de fechas y tiempos en JavaScript.
-Convert-Units: Paquete para realizar conversiones entre diferentes unidades de medida.
-Morse: Paquete que convierte texto a código morse.
-Dotenv: Paquete para cargar variables de entorno desde un archivo .env.
-Instalación
+
+- **Node.js**: Entorno de ejecución para JavaScript en el lado del servidor.
+- **Express**: Framework web para Node.js que facilita la creación de aplicaciones y APIs.
+- **Color**: Paquete para manipular y convertir colores.
+- **Color-Namer**: Paquete que permite obtener el nombre de un color a partir de su código hexadecimal.
+- **Moment**: Biblioteca para el manejo de fechas y tiempos en JavaScript.
+- **Convert-Units**: Paquete para realizar conversiones entre diferentes unidades de medida.
+- **Morse**: Paquete que convierte texto a código morse.
+- **Dotenv**: Paquete para cargar variables de entorno desde un archivo `.env`.
+
+## Instalación
+
 Para instalar y configurar el proyecto, sigue estos pasos:
-Clona el repositorio en tu máquina local:
-bash
-git clone https://github.com/joseaco208/DarknessDev-API.git
+
+1. **Clona el repositorio** en tu máquina local:
+   ```bash
+   git clone https://github.com/joseaco208/DarknessDev-API.git
 
 Navega al directorio del proyecto:
 bash
