@@ -1,5 +1,4 @@
 
-text
 # DarknessDev API
 
 ![GitHub](https://img.shields.io/github/license/joseaco208/DarknessDev-API)
