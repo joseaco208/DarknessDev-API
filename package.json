@@ -5,16 +5,16 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1" // Agregado
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [], // Agregado
-  "author": "", // Agregado
-  "license": "ISC", // Agregado
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "@types/node": "^18.0.6", // Agregado
+    "@types/node": "^18.0.6",
     "color": "^4.2.3",
     "color-namer": "^1.4.0",
-    "convert-units": "^2.3.4", // Agregado
+    "convert-units": "^2.3.4",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "moment": "^2.30.1"
