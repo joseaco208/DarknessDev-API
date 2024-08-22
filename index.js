@@ -3,6 +3,7 @@ const express = require('express');
 const Color = require('color');
 const colorNamer = require('color-namer');
 const moment = require('moment');
+const convert = require('convert-units');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -22,9 +23,240 @@ const colorTranslations = {
     "gray": "Gris",
     "cyan": "Cian",
     "magenta": "Magenta",
-    // Agrega más traducciones según sea necesario
 };
 
+// Mapa de traducción de unidades
+const unitTranslations = {
+    'metros': 'm',
+    'pies': 'ft',
+    'kilómetros': 'km',
+    'millas': 'mi',
+    'centímetros': 'cm',
+    'pulgadas': 'in',
+    'yardas': 'yd',
+    'milímetros cuadrados': 'mm2',
+    'centímetros cuadrados': 'cm2',
+    'metros cuadrados': 'm2',
+    'hectáreas': 'ha',
+    'kilómetros cuadrados': 'km2',
+    'pulgadas cuadradas': 'in2',
+    'yardas cuadradas': 'yd2',
+    'pies cuadrados': 'ft2',
+    'acres': 'ac',
+    'millas cuadradas': 'mi2',
+    'microgramos': 'mcg',
+    'miligramos': 'mg',
+    'gramos': 'g',
+    'kilogramos': 'kg',
+    'toneladas': 't',
+    'milímetros cúbicos': 'mm3',
+    'centímetros cúbicos': 'cm3',
+    'mililitros': 'ml',
+    'centilitros': 'cl',
+    'decilitros': 'dl',
+    'litros': 'l',
+    'kilolitros': 'kl',
+    'metros cúbicos': 'm3',
+    'kilómetros cúbicos': 'km3',
+    'cucharaditas': 'tsk',
+    'cucharadas': 'msk',
+    'vasos': 'glas',
+    'tazas': 'kanna',
+    'onzas fluidas': 'fl-oz',
+    'pintas': 'pnt',
+    'cuartos': 'qt',
+    'galones': 'gal',
+    'unidades': 'ea',
+    'docenas': 'dz',
+    'grados Celsius': 'C',
+    'kelvin': 'K',
+    'grados Fahrenheit': 'F',
+    'grados Rankine': 'R',
+    'nanosegundos': 'ns',
+    'micrómetros': 'mu',
+    'milisegundos': 'ms',
+    'segundos': 's',
+    'minutos': 'min',
+    'horas': 'h',
+    'días': 'd',
+    'semanas': 'week',
+    'meses': 'month',
+    'años': 'year',
+    'bits': 'b',
+    'kilobits': 'Kb',
+    'megabits': 'Mb',
+    'gigabits': 'Gb',
+    'terabits': 'Tb',
+    'bytes': 'B',
+    'kilobytes': 'KB',
+    'megabytes': 'MB',
+    'gigabytes': 'GB',
+    'terabytes': 'TB',
+    'partes por millón': 'ppm',
+    'partes por mil millones': 'ppb',
+    'partes por billón': 'ppt',
+    'partes por cuatrillón': 'ppq',
+    'metros por segundo': 'm/s',
+    'kilómetros por hora': 'km/h',
+    'nudos': 'knot',
+    'pies por segundo': 'ft/s',
+    'minutos por kilómetro': 'min/km',
+    'segundos por metro': 's/m',
+    'minutos por milla': 'min/mi',
+    'segundos por pie': 's/ft',
+    'pascales': 'Pa',
+    'kilopascales': 'kPa',
+    'megapascales': 'MPa',
+    'hectopascales': 'hPa',
+    'bares': 'bar',
+    'torr': 'torr',
+    'libras por pulgada cuadrada': 'psi',
+    'mil libras por pulgada cuadrada': 'ksi',
+    'amperios': 'A',
+    'miliamperios': 'mA',
+    'kiloamperios': 'kA',
+    'voltios': 'V',
+    'milivoltios': 'mV',
+    'kilovoltios': 'kV',
+    'vatios': 'W',
+    'milivatios': 'mW',
+    'kilovatios': 'kW',
+    'megavatios': 'MW',
+    'gigavatios': 'GW',
+    'varios': 'VAR',
+    'milivarios': 'mVAR',
+    'kilovarios': 'kVAR',
+    'megavarios': 'MVAR',
+    'gigavarios': 'GVAR',
+    'voltios-amperios': 'VA',
+    'milivoltios-amperios': 'mVA',
+    'kilovoltios-amperios': 'kVA',
+    'megavoltios-amperios': 'MVA',
+    'gigavoltios-amperios': 'GVA',
+    'vatios-hora': 'Wh',
+    'milivatios-hora': 'mWh',
+    'kilovatios-hora': 'kWh',
+    'megavatios-hora': 'MWh',
+    'gigavatios-hora': 'GWh'
+};
+
+// Lista de unidades disponibles
+const availableUnits = {
+    'metros': 'm',
+    'centímetros': 'cm',
+    'kilómetros': 'km',
+    'pies': 'ft',
+    'pulgadas': 'in',
+    'millas': 'mi',
+    'yardas': 'yd',
+    'milímetros': 'mm',
+    'milímetros cuadrados': 'mm2',
+    'centímetros cuadrados': 'cm2',
+    'metros cuadrados': 'm2',
+    'hectáreas': 'ha',
+    'kilómetros cuadrados': 'km2',
+    'pulgadas cuadradas': 'in2',
+    'yardas cuadradas': 'yd2',
+    'pies cuadrados': 'ft2',
+    'acres': 'ac',
+    'millas cuadradas': 'mi2',
+    'microgramos': 'mcg',
+    'miligramos': 'mg',
+    'gramos': 'g',
+    'kilogramos': 'kg',
+    'toneladas': 't',
+    'milímetros cúbicos': 'mm3',
+    'centímetros cúbicos': 'cm3',
+    'mililitros': 'ml',
+    'centilitros': 'cl',
+    'decilitros': 'dl',
+    'litros': 'l',
+    'kilolitros': 'kl',
+    'metros cúbicos': 'm3',
+    'kilómetros cúbicos': 'km3',
+    'cucharaditas': 'tsk',
+    'cucharadas': 'msk',
+    'vasos': 'glas',
+    'tazas': 'kanna',
+    'onzas fluidas': 'fl-oz',
+    'pintas': 'pnt',
+    'cuartos': 'qt',
+    'galones': 'gal',
+    'unidades': 'ea',
+    'docenas': 'dz',
+    'grados Celsius': 'C',
+    'kelvin': 'K',
+    'grados Fahrenheit': 'F',
+    'grados Rankine': 'R',
+    'nanosegundos': 'ns',
+    'micrómetros': 'mu',
+    'milisegundos': 'ms',
+    'segundos': 's',
+    'minutos': 'min',
+    'horas': 'h',
+    'días': 'd',
+    'semanas': 'week',
+    'meses': 'month',
+    'años': 'year',
+    'bits': 'b',
+    'kilobits': 'Kb',
+    'megabits': 'Mb',
+    'gigabits': 'Gb',
+    'terabits': 'Tb',
+    'bytes': 'B',
+    'kilobytes': 'KB',
+    'megabytes': 'MB',
+    'gigabytes': 'GB',
+    'terabytes': 'TB',
+    'partes por millón': 'ppm',
+    'partes por mil millones': 'ppb',
+    'partes por billón': 'ppt',
+    'partes por cuatrillón': 'ppq',
+    'metros por segundo': 'm/s',
+    'kilómetros por hora': 'km/h',
+    'nudos': 'knot',
+    'pies por segundo': 'ft/s',
+    'minutos por kilómetro': 'min/km',
+    'segundos por metro': 's/m',
+    'minutos por milla': 'min/mi',
+    'segundos por pie': 's/ft',
+    'pascales': 'Pa',
+    'kilopascales': 'kPa',
+    'megapascales': 'MPa',
+    'hectopascales': 'hPa',
+    'bares': 'bar',
+    'torr': 'torr',
+    'libras por pulgada cuadrada': 'psi',
+    'mil libras por pulgada cuadrada': 'ksi',
+    'amperios': 'A',
+    'miliamperios': 'mA',
+    'kiloamperios': 'kA',
+    'voltios': 'V',
+    'milivoltios': 'mV',
+    'kilovoltios': 'kV',
+    'vatios': 'W',
+    'milivatios': 'mW',
+    'kilovatios': 'kW',
+    'megavatios': 'MW',
+    'gigavatios': 'GW',
+    'varios': 'VAR',
+    'milivarios': 'mVAR',
+    'kilovarios': 'kVAR',
+    'megavarios': 'MVAR',
+    'gigavarios': 'GVAR',
+    'voltios-amperios': 'VA',
+    'milivoltios-amperios': 'mVA',
+    'kilovoltios-amperios': 'kVA',
+    'megavoltios-amperios': 'MVA',
+    'gigavoltios-amperios': 'GVA',
+    'vatios-hora': 'Wh',
+    'milivatios-hora': 'mWh',
+    'kilovatios-hora': 'kWh',
+    'megavatios-hora': 'MWh',
+    'gigavatios-hora': 'GWh'
+};
+
+// Endpoint principal
 app.get('/', (req, res) => {
     res.send(`
         <h1>Bienvenido a la API de DarknessDev</h1>
@@ -63,7 +295,33 @@ app.get('/', (req, res) => {
         </p>
         <p>Ejemplo de solicitud: <code>GET /datediff?date1=2023-01-01&date2=2024-08-21</code></p>
         <p>Respuesta esperada: La diferencia en días entre las dos fechas proporcionadas, como <code>Diferencia de días: 597 días</code>.</p>
+
+        <h2>4. Conversión de Unidades</h2>
+        <p>Ruta: <code>/convertirunidad?valor=&de=&a=</code></p>
+        <p>Descripción: Convierte una cantidad de una unidad a otra (por ejemplo, de metros a pies).</p>
+        <p>Parámetros requeridos:
+            <ul>
+                <li><strong>valor</strong>: La cantidad a convertir.</li>
+                <li><strong>de</strong>: La unidad de origen (por ejemplo, <code>metros</code>).</li>
+                <li><strong>a</strong>: La unidad de destino (por ejemplo, <code>pies</code>).</li>
+            </ul>
+        </p>
+        <p>Ejemplo de solicitud: <code>GET /convertirunidad?valor=10&de=metros&a=pies</code></p>
+        <p>Respuesta esperada: La cantidad convertida a la unidad de destino, como <code>10 metros es igual a 32.81 pies.</code>.</p>
+
+        <h2>5. Unidades Disponibles</h2>
+        <p>Ruta: <code>/unidades</code></p>
+        <p>Descripción: Este endpoint devuelve una lista de todas las unidades que se pueden usar para la conversión. Asegúrate de escribir las unidades correctamente, incluyendo acentos y tildes. Por ejemplo, se debe escribir <code>kilómetros</code> con tilde, no <code>kilometro</code>.</p>
+        <p>Ejemplo de solicitud: <code>GET /unidades</code></p>
+        <p>Respuesta esperada: Una lista de unidades disponibles en español.</p>
     `);
+});
+
+// Endpoint para obtener las unidades disponibles
+app.get('/unidades', (req, res) => {
+    const unidadesList = Object.keys(availableUnits).map(unit => `• ${unit}`).join('<br>');
+    const message = `Asegúrate de escribir las unidades correctamente, incluyendo acentos y tildes. Por ejemplo, se debe escribir 'kilómetros' con tilde, no 'kilometro'.<br><br>Unidades disponibles:<br>${unidadesList}`;
+    res.send(message);
 });
 
 app.get('/color', (req, res) => {
@@ -112,12 +370,31 @@ app.get('/datediff', (req, res) => {
         const d1 = moment(date1, 'YYYY-MM-DD');
         const d2 = moment(date2, 'YYYY-MM-DD');
         const diffInDays = d2.diff(d1, 'days');
-        res.send(`Diferencia de días: ${diffInDays} días`);
+        res.send(`Diferencia de días: ${diffInDays} días`); // Corrección aquí
     } catch (error) {
         res.status(400).send('Fechas inválidas');
     }
 });
+                          // Endpoint para la conversión de unidades
+                          app.get('/convertirunidad', (req, res) => {
+                              const { valor, de, a } = req.query;
 
-app.listen(port, () => {
-    console.log(`Servidor corriendo en http://localhost:${port}`);
-});
+                              if (!valor || !de || !a) {
+                                  return res.status(400).send('Parámetros valor, de y a son requeridos.');
+                              }
+
+                              try {
+                                  // Convertir las unidades de español a las abreviaturas que convert-units entiende
+                                  const fromUnitInEnglish = unitTranslations[de] || de;
+                                  const toUnitInEnglish = unitTranslations[a] || a;
+
+                                  const numericValue = parseFloat(valor);
+                                  const result = convert(numericValue).from(fromUnitInEnglish).to(toUnitInEnglish);
+                                  res.send(`${numericValue} ${de} es igual a ${Math.round(result)} ${a}.`);
+                              } catch (error) {
+                                  res.status(400).send(error.message);
+                              }
+                          });
+                          app.listen(port, () => {
+                              console.log(`Servidor corriendo en http://localhost:${port}`); // Corrección aquí
+                          });
