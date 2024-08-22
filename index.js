@@ -1,9 +1,10 @@
-require('dotenv').config(); 
+require('dotenv').config();
 const express = require('express');
 const Color = require('color');
 const colorNamer = require('color-namer');
 const moment = require('moment');
 const convert = require('convert-units');
+const morse = require('morse'); // Importa el paquete morse
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -314,6 +315,17 @@ app.get('/', (req, res) => {
         <p>Descripción: Este endpoint devuelve una lista de todas las unidades que se pueden usar para la conversión. Asegúrate de escribir las unidades correctamente, incluyendo acentos y tildes. Por ejemplo, se debe escribir <code>kilómetros</code> con tilde, no <code>kilometro</code>.</p>
         <p>Ejemplo de solicitud: <code>GET /unidades</code></p>
         <p>Respuesta esperada: Una lista de unidades disponibles en español.</p>
+
+        <h2>6. Conversión de Texto a Código Morse</h2>
+        <p>Ruta: <code>/morse?text=</code></p>
+        <p>Descripción: Este endpoint convierte un texto en código morse.</p>
+        <p>Parámetro requerido:
+            <ul>
+                <li><strong>text</strong>: El texto a convertir en código morse (por ejemplo, <code>Hola</code>).</li>
+            </ul>
+        </p>
+        <p>Ejemplo de solicitud: <code>GET /morse?text=Hola</code></p>
+        <p>Respuesta esperada: El código morse correspondiente al texto proporcionado.</p>
     `);
 });
 
@@ -323,6 +335,8 @@ app.get('/unidades', (req, res) => {
     const message = `Asegúrate de escribir las unidades correctamente, incluyendo acentos y tildes. Por ejemplo, se debe escribir 'kilómetros' con tilde, no 'kilometro'.<br><br>Unidades disponibles:<br>${unidadesList}`;
     res.send(message);
 });
+
+// Continuación del código
 
 app.get('/color', (req, res) => {
     const hex = req.query.hex;
@@ -370,31 +384,46 @@ app.get('/datediff', (req, res) => {
         const d1 = moment(date1, 'YYYY-MM-DD');
         const d2 = moment(date2, 'YYYY-MM-DD');
         const diffInDays = d2.diff(d1, 'days');
-        res.send(`Diferencia de días: ${diffInDays} días`); // Corrección aquí
+        res.send(`Diferencia de días: ${diffInDays} días`);
     } catch (error) {
         res.status(400).send('Fechas inválidas');
     }
 });
-                          // Endpoint para la conversión de unidades
-                          app.get('/convertirunidad', (req, res) => {
-                              const { valor, de, a } = req.query;
 
-                              if (!valor || !de || !a) {
-                                  return res.status(400).send('Parámetros valor, de y a son requeridos.');
-                              }
+// Endpoint para la conversión de unidades
+app.get('/convertirunidad', (req, res) => {
+    const { valor, de, a } = req.query;
 
-                              try {
-                                  // Convertir las unidades de español a las abreviaturas que convert-units entiende
-                                  const fromUnitInEnglish = unitTranslations[de] || de;
-                                  const toUnitInEnglish = unitTranslations[a] || a;
+    if (!valor || !de || !a) {
+        return res.status(400).send('Parámetros valor, de y a son requeridos.');
+    }
 
-                                  const numericValue = parseFloat(valor);
-                                  const result = convert(numericValue).from(fromUnitInEnglish).to(toUnitInEnglish);
-                                  res.send(`${numericValue} ${de} es igual a ${Math.round(result)} ${a}.`);
-                              } catch (error) {
-                                  res.status(400).send(error.message);
-                              }
-                          });
-                          app.listen(port, () => {
-                              console.log(`Servidor corriendo en http://localhost:${port}`); // Corrección aquí
-                          });
+    try {
+        // Convertir las unidades de español a las abreviaturas que convert-units entiende
+        const fromUnitInEnglish = unitTranslations[de] || de;
+        const toUnitInEnglish = unitTranslations[a] || a;
+
+        const numericValue = parseFloat(valor);
+        const result = convert(numericValue).from(fromUnitInEnglish).to(toUnitInEnglish);
+        res.send(`${numericValue} ${de} es igual a ${Math.round(result)} ${a}.`);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
+
+// Endpoint para convertir texto a código morse
+app.get('/morse', (req, res) => {
+    const text = req.query.text;
+
+    if (!text) {
+        return res.status(400).send('Parámetro text es requerido');
+    }
+
+    const morseCode = morse.encode(text);
+    res.send(morseCode);
+});
+
+// Inicia el servidor
+app.listen(port, () => {
+    console.log(`Servidor corriendo en http://localhost:${port}`);
+});
