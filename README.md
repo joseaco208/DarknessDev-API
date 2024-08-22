@@ -24,12 +24,12 @@ La **API de DarknessDev** es una API RESTful desarrollada en **Node.js** que pro
 
 ## Características
 
-- **Conversión de Códigos Hexadecimales a Nombres de Colores**: Convierte códigos hexadecimales en nombres de colores en español.
-- **Conversión de Timestamps Unix a Formato Legible**: Transforma timestamps Unix en un formato que muestra días, horas, minutos y segundos.
-- **Cálculo de Diferencia de Días Entre Fechas**: Calcula la diferencia en días entre dos fechas proporcionadas.
-- **Conversión de Unidades de Medida**: Permite la conversión entre diferentes unidades de medida (longitud, masa, volumen, etc.).
-- **Conversión de Texto a Código Morse**: Convierte cualquier texto en su representación en código morse.
-- **Listado de Unidades Disponibles**: Proporciona una lista completa de unidades que pueden ser utilizadas para la conversión.
+- Conversión de códigos hexadecimales a nombres de colores.
+- Conversión de timestamps Unix a un formato legible.
+- Cálculo de la diferencia en días entre dos fechas.
+- Conversión de unidades de medida.
+- Conversión de texto a código morse.
+- Listado de unidades disponibles.
 
 ## Tecnologías
 
@@ -144,6 +144,6 @@ text
 ### Notas
 
 - Asegúrate de reemplazar `tu-usuario` y `tu-repositorio` con tu nombre de usuario y el nombre del repositorio en los enlaces de los badges.
+- Verifica que los enlaces internos funcionen correctamente llevándote a las secciones correspondientes dentro del documento.
 - Personaliza cualquier sección según las características específicas de tu API y tu estilo de documentación.
-- Puedes agregar más detalles o secciones según sea necesario, como "FAQ" o "Roadmap" si planeas agregar más funcionalidades en el futuro.
 
