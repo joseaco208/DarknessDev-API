@@ -5,6 +5,7 @@ const colorNamer = require('color-namer');
 const moment = require('moment');
 const convert = require('convert-units');
 const morse = require('morse'); // Importa el paquete morse
+const QRCode = require('qrcode'); // Importa el paquete qrcode
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -262,70 +263,47 @@ app.get('/', (req, res) => {
     res.send(`
         <h1>Bienvenido a la API de DarknessDev</h1>
         <p>Esta API ofrece varios servicios principales:</p>
-
         <h2>1. Conversión de Códigos Hexadecimales a Nombres de Colores</h2>
         <p>Ruta: <code>/color?hex=</code></p>
-        <p>Descripción: Este endpoint convierte un código hexadecimal de color en su nombre correspondiente en español. El código hexadecimal puede ser de 3 o 6 dígitos.</p>
-        <p>Parámetro requerido:
-            <ul>
-                <li><strong>hex</strong>: El código hexadecimal del color (por ejemplo, <code>FF5733</code> o <code>F53</code>).</li>
-            </ul>
-        </p>
+        <p>Descripción: Este endpoint convierte un código hexadecimal de color en su nombre correspondiente en español.</p>
+        <p>Parámetro requerido: <strong>hex</strong>: El código hexadecimal del color (ejemplo: <code>FF5733</code>).</p>
         <p>Ejemplo de solicitud: <code>GET /color?hex=FF5733</code></p>
-        <p>Respuesta esperada: El nombre del color en español, como <code>Naranja</code> para el código <code>FF5733</code>.</p>
-
+        <p>Respuesta esperada: El nombre del color en español.</p>
         <h2>2. Conversión de Timestamp Unix a Tiempo Formateado</h2>
         <p>Ruta: <code>/timestamp?unix=</code></p>
-        <p>Descripción: Este endpoint convierte un timestamp Unix (en segundos) a un formato legible que muestra el tiempo en días, horas, minutos y segundos.</p>
-        <p>Parámetro requerido:
-            <ul>
-                <li><strong>unix</strong>: El timestamp Unix en segundos (por ejemplo, <code>86400</code> para 1 día).</li>
-            </ul>
-        </p>
+        <p>Descripción: Convierte un timestamp Unix a un formato legible.</p>
+        <p>Parámetro requerido: <strong>unix</strong>: El timestamp Unix en segundos.</p>
         <p>Ejemplo de solicitud: <code>GET /timestamp?unix=60</code></p>
-        <p>Respuesta esperada: El tiempo formateado como <code>0 días, 0 horas, 1 minutos, 0 segundos</code> para un timestamp de 60 segundos.</p>
-
+        <p>Respuesta esperada: El tiempo formateado.</p>
         <h2>3. Diferencia de Días Entre Fechas</h2>
         <p>Ruta: <code>/datediff?date1=&date2=</code></p>
-        <p>Descripción: Este endpoint calcula la diferencia en días entre dos fechas.</p>
-        <p>Parámetros requeridos:
-            <ul>
-                <li><strong>date1</strong>: La primera fecha en formato ISO (por ejemplo, <code>2023-01-01</code>).</li>
-                <li><strong>date2</strong>: La segunda fecha en formato ISO (por ejemplo, <code>2024-08-21</code>).</li>
-            </ul>
-        </p>
+        <p>Descripción: Calcula la diferencia en días entre dos fechas.</p>
+        <p>Parámetros requeridos: <strong>date1</strong> y <strong>date2</strong> en formato ISO.</p>
         <p>Ejemplo de solicitud: <code>GET /datediff?date1=2023-01-01&date2=2024-08-21</code></p>
-        <p>Respuesta esperada: La diferencia en días entre las dos fechas proporcionadas, como <code>Diferencia de días: 597 días</code>.</p>
-
+        <p>Respuesta esperada: La diferencia en días.</p>
         <h2>4. Conversión de Unidades</h2>
         <p>Ruta: <code>/convertirunidad?valor=&de=&a=</code></p>
-        <p>Descripción: Convierte una cantidad de una unidad a otra (por ejemplo, de metros a pies).</p>
-        <p>Parámetros requeridos:
-            <ul>
-                <li><strong>valor</strong>: La cantidad a convertir.</li>
-                <li><strong>de</strong>: La unidad de origen (por ejemplo, <code>metros</code>).</li>
-                <li><strong>a</strong>: La unidad de destino (por ejemplo, <code>pies</code>).</li>
-            </ul>
-        </p>
+        <p>Descripción: Convierte una cantidad de una unidad a otra.</p>
+        <p>Parámetros requeridos: <strong>valor</strong>, <strong>de</strong> y <strong>a</strong>.</p>
         <p>Ejemplo de solicitud: <code>GET /convertirunidad?valor=10&de=metros&a=pies</code></p>
-        <p>Respuesta esperada: La cantidad convertida a la unidad de destino, como <code>10 metros es igual a 32.81 pies.</code>.</p>
-
+        <p>Respuesta esperada: La cantidad convertida.</p>
         <h2>5. Unidades Disponibles</h2>
         <p>Ruta: <code>/unidades</code></p>
-        <p>Descripción: Este endpoint devuelve una lista de todas las unidades que se pueden usar para la conversión. Asegúrate de escribir las unidades correctamente, incluyendo acentos y tildes. Por ejemplo, se debe escribir <code>kilómetros</code> con tilde, no <code>kilometro</code>.</p>
+        <p>Descripción: Devuelve una lista de todas las unidades disponibles.</p>
         <p>Ejemplo de solicitud: <code>GET /unidades</code></p>
-        <p>Respuesta esperada: Una lista de unidades disponibles en español.</p>
-
+        <p>Respuesta esperada: Lista de unidades.</p>
         <h2>6. Conversión de Texto a Código Morse</h2>
         <p>Ruta: <code>/morse?text=</code></p>
-        <p>Descripción: Este endpoint convierte un texto en código morse.</p>
-        <p>Parámetro requerido:
-            <ul>
-                <li><strong>text</strong>: El texto a convertir en código morse (por ejemplo, <code>Hola</code>).</li>
-            </ul>
-        </p>
+        <p>Descripción: Convierte un texto en código morse.</p>
+        <p>Parámetro requerido: <strong>text</strong>.</p>
         <p>Ejemplo de solicitud: <code>GET /morse?text=Hola</code></p>
-        <p>Respuesta esperada: El código morse correspondiente al texto proporcionado.</p>
+        <p>Respuesta esperada: El código morse correspondiente.</p>
+        <h2>7. Generación de QR Codes</h2>
+        <p>Ruta: <code>/qr?text=</code></p>
+        <p>Descripción: Genera un código QR basado en el texto proporcionado.</p>
+        <p>Parámetro requerido: <strong>text</strong>: El texto que deseas convertir en un código QR.</p>
+        <p>Ejemplo de solicitud: <code>GET /qr?text=Lo que quieras convertir en QR</code></p>
+        <p>Respuesta esperada: Una imagen del código QR que representa el texto proporcionado.</p>
     `);
 });
 
@@ -336,8 +314,7 @@ app.get('/unidades', (req, res) => {
     res.send(message);
 });
 
-// Continuación del código
-
+// Endpoint para obtener el nombre de un color
 app.get('/color', (req, res) => {
     const hex = req.query.hex;
 
@@ -356,6 +333,7 @@ app.get('/color', (req, res) => {
     }
 });
 
+// Endpoint para convertir un timestamp Unix a tiempo formateado
 app.get('/timestamp', (req, res) => {
     const unixTimestamp = parseInt(req.query.unix, 10);
 
@@ -373,6 +351,7 @@ app.get('/timestamp', (req, res) => {
     res.send(formattedTime);
 });
 
+// Endpoint para calcular la diferencia de días entre fechas
 app.get('/datediff', (req, res) => {
     const { date1, date2 } = req.query;
 
@@ -390,40 +369,59 @@ app.get('/datediff', (req, res) => {
     }
 });
 
-// Endpoint para la conversión de unidades
-app.get('/convertirunidad', (req, res) => {
-    const { valor, de, a } = req.query;
+ // Endpoint para la conversión de unidades
+ app.get('/convertirunidad', (req, res) => {
+     const { valor, de, a } = req.query;
 
-    if (!valor || !de || !a) {
-        return res.status(400).send('Parámetros valor, de y a son requeridos.');
-    }
+     if (!valor || !de || !a) {
+         return res.status(400).send('Parámetros valor, de y a son requeridos.');
+     }
 
-    try {
-        // Convertir las unidades de español a las abreviaturas que convert-units entiende
-        const fromUnitInEnglish = unitTranslations[de] || de;
-        const toUnitInEnglish = unitTranslations[a] || a;
+     try {
+         // Convertir las unidades de español a las abreviaturas que convert-units entiende
+         const fromUnitInEnglish = unitTranslations[de] || de;
+         const toUnitInEnglish = unitTranslations[a] || a;
 
-        const numericValue = parseFloat(valor);
-        const result = convert(numericValue).from(fromUnitInEnglish).to(toUnitInEnglish);
-        res.send(`${numericValue} ${de} es igual a ${Math.round(result)} ${a}.`);
-    } catch (error) {
-        res.status(400).send(error.message);
-    }
-});
+         const numericValue = parseFloat(valor);
+         const result = convert(numericValue).from(fromUnitInEnglish).to(toUnitInEnglish);
+         res.send(`${numericValue} ${de} es igual a ${Math.round(result)} ${a}.`);
+     } catch (error) {
+         res.status(400).send(error.message);
+     }
+ });
 
-// Endpoint para convertir texto a código morse
-app.get('/morse', (req, res) => {
-    const text = req.query.text;
+ // Endpoint para convertir texto a código morse
+ app.get('/morse', (req, res) => {
+     const text = req.query.text;
 
-    if (!text) {
-        return res.status(400).send('Parámetro text es requerido');
-    }
+     if (!text) {
+         return res.status(400).send('Parámetro text es requerido');
+     }
 
-    const morseCode = morse.encode(text);
-    res.send(morseCode);
-});
+     const morseCode = morse.encode(text);
+     res.send(morseCode);
+ });
 
-// Inicia el servidor
-app.listen(port, () => {
-    console.log(`Servidor corriendo en http://localhost:${port}`);
-});
+ // Nuevo endpoint para generar códigos QR
+ app.get('/qr', async (req, res) => {
+     const text = req.query.text;
+
+     if (!text) {
+         return res.status(400).send('Parámetro text es requerido');
+     }
+
+     try {
+         // Generar el código QR como una imagen en formato Data URL
+         const qrCode = await QRCode.toDataURL(text);
+
+         // Enviar la imagen del código QR como respuesta
+         res.send(`<img src="${qrCode}">`);
+     } catch (error) {
+         res.status(500).send('Error al generar el código QR');
+     }
+ });
+
+ // Inicia el servidor
+ app.listen(port, () => {
+     console.log(`Servidor corriendo en http://localhost:${port}`);
+ });
