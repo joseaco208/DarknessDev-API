@@ -277,8 +277,17 @@ app.get('/', (req, res) => {
                 }
                 #darkModeToggle {
                     margin: 20px;
-                    padding: 10px;
+                    padding: 15px 30px; /* Aumentar el padding para hacer el botón más grande */
+                    font-size: 18px; /* Aumentar el tamaño de la fuente */
                     cursor: pointer;
+                    border: none; /* Sin borde */
+                    border-radius: 5px; /* Bordes redondeados */
+                    background-color: #007BFF; /* Color de fondo */
+                    color: white; /* Color del texto */
+                    transition: background-color 0.3s; /* Transición suave para el color de fondo */
+                }
+                #darkModeToggle:hover {
+                    background-color: #0056b3; /* Color de fondo al pasar el mouse */
                 }
             </style>
         </head>
@@ -301,13 +310,13 @@ app.get('/', (req, res) => {
             <h2>3. Diferencia de Días Entre Fechas</h2>
             <p>Ruta: <code>/datediff?date1=&date2=</code></p>
             <p>Descripción: Calcula la diferencia en días entre dos fechas.</p>
-            <p>Parámetros requeridos: <strong>date1</strong> y <strong>date2</strong> en formato ISO.</p>
+            <p>Parámetros requeridos: <strong>date1</strong> y             <strong>date2</strong> en formato ISO.</p>
             <p>Ejemplo de solicitud: <code>GET /datediff?date1=2023-01-01&date2=2024-08-21</code></p>
             <p>Respuesta esperada: La diferencia en días.</p>
             <h2>4. Conversión de Unidades</h2>
             <p>Ruta: <code>/convertirunidad?valor=&de=&a=</code></p>
             <p>Descripción: Convierte una cantidad de una unidad a otra.</p>
-                        <p>Parámetros requeridos: <strong>valor</strong>, <strong>de</strong> y <strong>a</strong>.</p>
+            <p>Parámetros requeridos: <strong>valor</strong>, <strong>de</strong> y <strong>a</strong>.</p>
             <p>Ejemplo de solicitud: <code>GET /convertirunidad?valor=10&de=metros&a=pies</code></p>
             <p>Respuesta esperada: La cantidad convertida.</p>
             <h2>5. Unidades Disponibles</h2>
