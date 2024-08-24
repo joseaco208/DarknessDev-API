@@ -347,6 +347,8 @@ app.get('/', (req, res) => {
                 .button-bw {
                     background-color: black;
                     color: white;
+                    display: block; /* Asegúrate de que el botón ocupe todo el ancho disponible */
+                    margin: 20px auto; /* Centra el botón horizontalmente */
                 }
             </style>
         </head>
