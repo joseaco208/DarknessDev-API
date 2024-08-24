@@ -284,6 +284,9 @@ app.get('/', (req, res) => {
                     max-width: 800px;
                     margin: 0 auto;
                     padding: 40px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
                 }
                 h1, h2 {
                     color: #007bff;
@@ -336,6 +339,7 @@ app.get('/', (req, res) => {
                     cursor: pointer;
                     border-radius: 4px;
                     transition: background-color 0.3s;
+                    margin-bottom: 20px;
                 }
                 .button:hover {
                     background-color: #0056b3;
@@ -427,7 +431,7 @@ app.get('/', (req, res) => {
         </html>
     `);
 });
-    
+
 // Endpoint para obtener las unidades disponibles
 app.get('/unidades', (req, res) => {
     const unidadesList = Object.keys(availableUnits).map(unit => `• ${unit}`).join('<br>');
